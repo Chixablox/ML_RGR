@@ -4,31 +4,32 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import pickle
+from sklearn.preprocessing import StandardScaler
 
 def LearnWithTeacher(arr):
     st.title("Обучение с учителем")
     
-    models = ["KNeighborsClassifier", "DecisionTreeClassifier", "SVM"]
+    models = ["SVM", "KNeighborsClassifier", "DecisionTreeClassifier"]
     models_type = st.selectbox("Выберите модель", models)
     
     if models_type is not None:
         if models_type == "SVM":
             st.header("SVM")
             with open('data/Models/SVM.pkl', 'rb') as file:
-                svm_model = pickle.load(file)
-            Pred(svm_model, arr)
+                model = pickle.load(file)
+            Pred(model, arr)
             
         elif models_type == "KNeighborsClassifier":
             st.header("KNeighborsClassifier")
             with open('data/Models/KNeighborsClassifier.pkl', 'rb') as file:
-                knn_model = pickle.load(file)
-            Pred(knn_model, arr)
+                model = pickle.load(file)
+            Pred(model, arr)
             
         elif models_type == "DecisionTreeClassifier":
             st.header("DecisionTreeClassifier")
             with open('data/Models/DecisionTreeClassifier.pkl', 'rb') as file:
-                tree_model = pickle.load(file)
-            Pred(tree_model, arr)
+                model = pickle.load(file)
+            Pred(model, arr)
 
 def Ensembles(arr):
     st.title("Ансамбли")
@@ -40,33 +41,33 @@ def Ensembles(arr):
         if models_type == "BaggingClassifier":
             st.header("BaggingClassifier")
             with open('data/Models/BaggingClassifier.pkl', 'rb') as file:
-                bag_model = pickle.load(file)
-            Pred(bag_model, arr)
+                model = pickle.load(file)
+            Pred(model, arr)
             
         elif models_type == "GradientBoostingClassifier":
             st.header("GradientBoostingClassifier")
             with open('data/Models/GradientBoostingClassifier.pkl', 'rb') as file:
-                grad_model = pickle.load(file)
-            Pred(grad_model, arr)
+                model = pickle.load(file)
+            Pred(model, arr)
             
         elif models_type == "StackingClassifier":
             st.header("StackingClassifier")
             with open('data/Models/StackingClassifier.pkl', 'rb') as file:
-                stack_model = pickle.load(file)
-            Pred(stack_model, arr)
+                model = pickle.load(file)
+            Pred(model, arr)
             
 def LearnWithoutTeacher(arr):
     st.title("Обучение без учителя")
     st.header("KMeans")
     with open('data/Models/KMeans.pkl', 'rb') as file:
-            km_model = pickle.load(file)
-    Pred(km_model, arr)
+            model = pickle.load(file)
+    Pred(model, arr)
 
 def DNN(arr):
     st.title("Нейронные сети")
-    st.header("DNN")
-    dnn_model = load_model('data/Models/DNNClass.h5')
-    Pred(dnn_model, arr)
+    st.header("KMeans")
+    model = load_model('data/Models/DNNClass.h5')
+    Pred(model, arr)
     
 
 def Pred(model, arr):
@@ -86,38 +87,45 @@ def Pred(model, arr):
 
 st.title("Работа с моделями классификации")
 
+load_df = st.file_uploader("Загрузите файл типа *.csv", type="csv")
 
-est_diameter_min = st.number_input("Минимальный диаметр:", min_value=0.001, max_value=100.0, value=0.084)
+if load_df is not None:
+    df = pd.read_csv(load_df)
+    df  = df.drop(["Unnamed: 0", "hazardous"], axis=1)
+    st.write(df[:5])
+    sc = StandardScaler()
+    df = sc.fit_transform(df)
     
-est_diameter_max = st.number_input("Максимальный диаметр:", min_value=0.001, max_value=100.0, value=0.18)
+    est_diameter_min = st.number_input("Минимальный диаметр:", min_value=0.001, max_value=15.2, value=0.0084)
     
-relative_velocity = st.number_input("Скорость объекта:", min_value=0.01, max_value=10000000.01, value=79519.078)
+    est_diameter_max = st.number_input("Максимальный диаметр:", min_value=0.001, max_value=15.2, value=0.018)
     
-miss_distance = st.number_input("Пропущенное расстояние:", min_value=0.01, max_value=100000000.01, value=30000000.1)
+    relative_velocity = st.number_input("Скорость объекта:", min_value=0.01, max_value=10000000.01, value=8424.2)
     
-absolute_magnitude = st.number_input("Абсолютная светимость:", min_value=0.01, max_value=100.0, value=22.9)
+    miss_distance = st.number_input("Пропущенное расстояние:", min_value=0.01, max_value=1000000000.01, value=3800000.2)
     
-arr = np.array([est_diameter_min, est_diameter_max, relative_velocity, miss_distance, absolute_magnitude])
-
+    absolute_magnitude = st.number_input("Абсолютная светимость:", min_value=0.01, max_value=100.0, value=27.5)
     
-checkboxbox = st.checkbox("Выбрать модель")
+    arr = np.array([est_diameter_min, est_diameter_max, relative_velocity, miss_distance, absolute_magnitude])
     
-if checkboxbox:
+    checkboxbox = st.checkbox("Выбрать модель")
     
-    arr = arr.reshape(1, -1)
-    st.write(arr)
+    if checkboxbox:
         
-    models = ["Обучение с учителем", "Ансамбли", "Обучение без учителя", "DNN"]
+        arr = arr.reshape(1, -1)
+        arr = sc.transform(arr)
+        
+        models = ["Обучение с учителем", "Ансамбли", "Обучение без учителя", "DNN"]
     
-    models_type = st.selectbox("Выберите тип модели", models)
+        models_type = st.selectbox("Выберите тип модели", models)
     
-    if models_type is not None:
-        if models_type == "Обучение с учителем":
-            LearnWithTeacher(arr)
-        elif models_type == "Ансамбли":
-            Ensembles(arr)    
-        elif models_type == "Обучение без учителя":
-            LearnWithoutTeacher(arr)
-        elif models_type == "DNN":
-            DNN(arr)
+        if models_type is not None:
+            if models_type == "Обучение с учителем":
+                LearnWithTeacher(arr)
+            elif models_type == "Ансамбли":
+                Ensembles(arr)    
+            elif models_type == "Обучение без учителя":
+                LearnWithoutTeacher(arr)
+            elif models_type == "DNN":
+                DNN(arr)
 
