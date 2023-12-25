@@ -1,0 +1,11 @@
+notebook
+scikit-learn
+pandas
+matplotlib
+seaborn
+tensorflow
+imblearn
+scipy
+spacy
+spacy-lookups-data
+streamlit
