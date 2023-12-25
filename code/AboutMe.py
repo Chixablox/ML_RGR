@@ -3,7 +3,7 @@ from PIL import Image
 
 st.header("Web-приложение для вывода моделей ML и анализа данных")
 
-img = Image.open("D:/MachineLearning/ML_RGR/data/Photo/I.jpg")
+img = Image.open("data/Photo/I.jpg")
 
 st.header("Обо мне")
 st.subheader("ФИО")
