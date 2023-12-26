@@ -3,6 +3,7 @@
 venv
 VenvActivation.txt
 example
+part100.csv
 
 # Compiled Object files
 *.slo
