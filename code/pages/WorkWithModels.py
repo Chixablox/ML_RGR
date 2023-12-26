@@ -124,7 +124,7 @@ def WorkWithOneObject():
         arr = arr.reshape(1, -1)
         arr = sc.transform(arr)
         
-        models = ["Обучение с учителем", "Ансамбли", "Обучение без учителя", "DNN"]
+        models = ["Обучение с учителем", "Ансамбли", "Обучение без учителя", "Нейронные сети"]
     
         models_type = st.selectbox("Выберите тип модели", models)
     
@@ -135,7 +135,7 @@ def WorkWithOneObject():
                 Ensembles(arr)    
             elif models_type == "Обучение без учителя":
                 LearnWithoutTeacher(arr)
-            elif models_type == "DNN":
+            elif models_type == "Нейронные сети":
                 DNN(arr)
 
 def WorkWithDataset():
