@@ -39,7 +39,7 @@ def Hist():
     st.pyplot(plt)
 
 
-def LmlPlot():
+def Scatter():
     st.title("Диаграмма рассеивания для первой 1000 строк")    
     features = ["est_diameter_min", "est_diameter_max", "relative_velocity", "miss_distance" , "absolute_magnitude", "hazardous"]
     ft1 = st.selectbox("Выберите первый признак", features, key='selectbox1')
@@ -73,5 +73,5 @@ if vis_type is not None:
     elif vis_type == "Гистограмма":
         Hist()
     elif vis_type == "Диаграмма рассеивания":
-        LmlPlot()
+        Scatter()
 

@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 def LearnWithTeacher(arr):
     st.title("Обучение с учителем")
     
-    models = ["SVM", "KNeighborsClassifier", "DecisionTreeClassifier"]
+    models = ["KNeighborsClassifier", "SVM", "DecisionTreeClassifier"]
     models_type = st.selectbox("Выберите модель", models)
     
     if models_type is not None:
@@ -65,7 +65,7 @@ def LearnWithoutTeacher(arr):
 
 def DNN(arr):
     st.title("Нейронные сети")
-    st.header("KMeans")
+    st.header("DNN")
     model = load_model('data/Models/DNNClass.h5')
     Pred(model, arr)
     
@@ -91,6 +91,8 @@ load_df = st.file_uploader("Загрузите файл типа *.csv", type="c
 
 if load_df is not None:
     df = pd.read_csv(load_df)
+    
+    
     df  = df.drop(["Unnamed: 0", "hazardous"], axis=1)
     st.write(df[:5])
     sc = StandardScaler()
