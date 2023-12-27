@@ -171,7 +171,7 @@ def WorkWithDataset():
 
 st.title("Работа с моделями классификации")
 
-st.header("Выбирите тип предсказания")
+st.header("Выберите тип предсказания")
 types_of_predict = ["Предсказание для одного объекта", "Предсказание для датасета"]
 
 pred_type = st.selectbox("Выберите тип предсказаний", types_of_predict)
